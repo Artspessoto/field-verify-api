@@ -1,9 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { env } from "~/env";
 
 const isDev = env.NODE_ENV == "dev";
 
 const prisma = new PrismaClient({
+  adapter: new PrismaPg({
+    connectionString: env.DATABASE_URL,
+  }),
   log: isDev
     ? [
         { emit: "event", level: "query" },
