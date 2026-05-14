@@ -1,83 +1,85 @@
 # FieldVerify API
 
-FieldVerify é uma aplicação desenvolvida para gerenciar fluxos de auditoria em campo e prevenção à fraude em processos de credenciamento B2B. Ele foi desenvolvido para resolver um problema comum em fintechs e empresas de pagamento: o cadastro de lojstas que não existem (empresas de fachada, ou "lojistas fantasmas").
+FieldVerify is an application designed to manage field audit workflows and prevent fraud during B2B merchant onboarding. It was developed to solve a common problem in fintechs and payment companies: the registration of non-existent merchants (shell companies or "ghost merchants").
 
-A ideia é simples: em vez de confiar apenas em documentos enviados pela internet, o sistema exige que vá um auditor/agente até o local. O app garante que o auditor realmente esteve lá e dedicou tempo para verificar o estabelecimento antes de liberarmos limites de crédito.
+The concept is straightforward: instead of relying solely on documents submitted online, the system requires a field auditor/agent to visit the physical location. The app ensures the auditor was actually present and spent enough time verifying the establishment before any credit limits are granted.
 
-## Desafios técnicos
+## Technical Challenges
 
-- **Validação de Localização (GPS):** Não adianta o agente dizer que está lá. O sistema faz um cálculo de geolocalização e só libera o início da auditoria se ele estiver a menos de 100 metros do endereço cadastrado.
-- **Trava de Tempo Real:** Para evitar que alguém preencha tudo correndo sem olhar nada, implementei uma regra onde a auditoria só pode ser finalizada após 20 minutos de permanência no local.
-- **Controle de Acesso (RBAC):** Separei o que um Agente (que faz a visita) pode fazer do que um Supervisor (que aprova os relatórios) pode ver.
+- **Location Validation (GPS):** It is not enough for the agent to claim they are on-site. The system performs a geolocation calculation and only allows the audit to begin if the agent is within 100 meters of the registered address.
 
-# Tecnologias
+- **Time-Based-Validation:** To prevent agents from rushing through the process without proper inspection, a rule is implemented where the audit can only be finalized after at least 20 minutes of stay at the location.
 
-- Node.js
-- Fastify
+- **Access Control (RBAC):** Permissions are strictly separated between what an Agent (field visitor) can perform and what a Supervisor (report reviewer) can access.
+
+# Tech Stack
+
+- Node.js & Fastify
 - TypeScript
-- ORM Prisma
+- Prisma ORM
 - PostgreSQL (Docker)
 - Zod
 - tsup & tsx (build)
+- Vitest
 
-## RFs (Requisitos funcionais)
+## FRs (Functional Requirements)
 
-### Gestão de acesso
+### Access Management
 
-- [ ] Cadastro de Usuários: Deve ser possível cadastrar agentes e supervisores;
-- [ ] Autenticação: Deve ser possível se autenticar via email e senha (JWT);
-- [ ] Verificação de Identidade: Deve ser possível verificar o email do usuário via token;
-- [ ] Recuperação de Senha: Deve ser possível solicitar a alteração de senha via email;
-- [ ] Perfil: Deve ser possível obter o perfil do usuário logado;
+- [ ] User Registration: Ability to register agents and supervisors.
+- [ ] Authentication: Login via email and password (JWT).
+- [ ] Identity Verification: Email verification through tokens.
+- [ ] Password Recovery: Request password changes via email.
+- [ ] Profile: Access the profile data of the currently logged-in user.
 
-### Operações de campo
+### Field Operations
 
-- [ ] Busca por Proximidade: Deve ser possível buscar lojistas próximos (até 10km);
-- [ ] Busca por Dados: Deve ser possível buscar lojistas por nome ou CNPJ;
-- [ ] Check-in de Auditoria: Deve ser possível realizar o check-in ao chegar em um lojista;
-- [ ] Evidência Fotográfica: O agente deve anexar ao menos 3 fotos (fachada, interior e comprovante de endereço) para concluir a auditoria.
-- [ ] Validação: Deve ser possível concluir uma auditoria após o período mínimo de permanência;
-- [ ] Histórico: Deve ser possível obter o histórico de auditorias realizadas pelo agente.
+- [ ] Proximity Search: Find merchants within a 10km radius.
+- [ ] Merchant Search: Search for merchants by name or CNPJ (Tax ID).
+- [ ] Audit Check-in: Perform a check-in upon arrival at the merchant's location.
+- [ ] Photographic Evidence: Agents must attach at least 3 photos (frontage, interior, and proof of address) to complete the audit.
+- [ ] Validation: Complete the audit only after the minimum required stay duration.
+- [ ] History: Access the audit history performed by the agent.
 
-### Administrativo
+### Administrative
 
-- [ ] Gestão de Lojistas: Deve ser possível cadastrar e editar lojistas para a fila de auditoria;
-- [ ] Monitoramento: Supervisores devem poder visualizar auditorias suspeitas de fraude.
+- [ ] Merchant Management: Register and edit merchants for the audit queue.
+- [ ] Monitoring: Supervisors can view audits flagged as suspicious of fraud.
 
-## RNs (Regras de Negócio)
+## Business Rules
 
-- [ ] E-mail Único: O usuário não deve poder se cadastrar com um e-mail duplicado;
-- [ ] Verificação obrigatória: O agente só pode iniciar auditorias se o seu email estiver verificado;
-- [ ] Limite Diário: O agente não pode realizar duas auditorias no mesmo lojista no mesmo dia;
-- [ ] Trava de Distância: O agente não pode iniciar a auditoria se o seu GPS atual estiver a mais de 100m do estabelecimento cadastrado;
-- [ ] Trava de Tempo: A auditoria só pode ser validada/concluída em até 20 minutos após o início do check-in;
-- [ ] Nível de Acesso: Cadastro de lojistas e alteração de status de auditoria (Aprovar/Rejeitar) são exclusivos de administradores;
-- [ ] Imutabilidade: Uma auditoria concluída ou rejeitada não pode ter seus status de geolocalização alterados.
+- Unique Email: Users cannot register with a duplicate email address.
+- Mandatory Verification: Agents can only start audits if their email has been verified.
+- Daily Limit: Agents cannot perform two audits for the same merchant on the same day.
+- Distance Lock: Audits cannot be started if the current GPS coordinates are more than 100m away from the registered establishment.
+- Time Lock: Audits can only be validated/completed at least 20 minutes after the initial check-in.
+- Access Level: Merchant registration and audit status changes (Approve/Reject) are exclusive to Administrators/Supervisors.
+- Immutability: Once an audit is completed or rejected, its geolocation data cannot be altered.
 
-## RNFs (Requisitos não-funcionais)
+## NFRs (Non-Functional Requirements)
 
-- [ ] Criptografia: As senhas devem ser persistidas utilizando BcryptJS;
-- [ ] Persistência: Os dados devem ser armazenados em um banco PostgreSQL;
-- [ ] Escalabilidade: Listagem de lojistas e auditorias devem ser paginadas (20 itens por página);
-- [ ] Segurança: O usuário deve ser identificado por um JWT (JSON Web Token) com Refresh Token;
-- [ ] Upload Obrigatório: A auditoria não pode ser movida para o status COMPLETED sem que as imagens obrigatórias tenham sido enviadas.
-- [ ] Rastreabilidade: Todas as tabelas devem possuir registros automáticos de data de criação e última atualização (`created_at`, `updated_at`).
+- Cryptography: Passwords must be persisted using BcryptJS.
+- Persistence: Data must be stored in a PostgreSQL database.
+- Scalability: Merchant and audit listings must be paginated (20 items per page).
+- Security: Users must be identified via JWT (JSON Web Token) with Refresh Token.
+- Mandatory Upload: The audit status cannot be moved to COMPLETED until mandatory images are uploaded.
+- Traceability: All tables must include automatic timestamps for creation and last update (`created_at`, `updated_at`).
 
-# Como rodar a aplicação
+# Run App
 
 ```bash
-# Instalar dependências
+# Install dependencies
 npm install
 
-# Subir o banco de dados
+# Start database
 docker-compose up -d
 
-# Executar migrações do banco
+# Run migrations
 npm run prisma:migrate -- --name initial_schema
 
-# Rodar em modo dev
+# Dev mode
 npm run start:dev
 
-# abre a interface visual do banco de dados no browser
+# Prima Studio (visual interface)
 npm run prisma:studio
 ```
