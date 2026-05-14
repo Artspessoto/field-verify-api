@@ -1,7 +1,15 @@
 import { loadEnvFile } from "node:process";
 import { z } from "zod";
 
-loadEnvFile(".env");
+const currentEnv = process.env.NODE_ENV || "dev";
+
+const envFile = `.env.${currentEnv}`;
+
+try {
+  loadEnvFile(envFile);
+} catch {
+  loadEnvFile(".env");
+}
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["dev", "test", "production"]).default("dev"),
