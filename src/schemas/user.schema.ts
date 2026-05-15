@@ -14,4 +14,21 @@ export const userSchema = z.object({
     .max(16, "Password must contain at most 16 characters"),
 });
 
+export const userResponseSchema = userSchema
+  .omit({
+    password: true,
+  })
+  .extend({
+    created_at: z.coerce.date(),
+    updated_at: z.coerce.date(),
+    email_verified_at: z.coerce.date().nullable(),
+  });
+
+export const searchSchema = z.object({
+  query: z.string().default(""),
+  page: z.coerce.number().min(1).default(1),
+  role: z.enum(["ADMIN", "AGENT"]).optional(),
+});
+
 export type UserBodySchema = z.infer<typeof userSchema>;
+export type UserResponse = z.infer<typeof userResponseSchema>;
