@@ -5,7 +5,7 @@
   "description": "FieldVerify é uma aplicação desenvolvida para gerenciar fluxos de auditoria em campo e prevenção à fraude em processos de credenciamento B2B.",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
     "build": "tsup src --out-dir build --clean --format esm",
     "test": "vitest",
