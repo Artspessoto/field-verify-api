@@ -11,7 +11,10 @@ export interface IAuthenticateUseCase {
 export class AuthenticateUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute({ email, password }: IAuthenticateUseCase): Promise<User> {
+  async execute({
+    email,
+    password,
+  }: IAuthenticateUseCase): Promise<{ user: User }> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -22,6 +25,6 @@ export class AuthenticateUseCase {
 
     if (!passwordMatches) throw new InvalidCredentialsError();
 
-    return user;
+    return { user };
   }
 }

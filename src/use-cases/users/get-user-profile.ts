@@ -9,11 +9,13 @@ export interface IGetUserProfileUseCaseReq {
 export class GetUserProfileUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute({ userId }: IGetUserProfileUseCaseReq): Promise<User> {
+  async execute({
+    userId,
+  }: IGetUserProfileUseCaseReq): Promise<{ user: User }> {
     const user = await this.usersRepository.findById(userId);
 
     if (!user) throw new ResourceNotFoundError();
 
-    return user;
+    return { user };
   }
 }
