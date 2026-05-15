@@ -5,6 +5,6 @@ export class InvalidCredentialsError extends AppError {
   public readonly code: string = "INVALID_CREDENTIALS";
 
   constructor() {
-    super("Invalid Credentials!");
+    super("Invalid Credentials");
   }
 }
