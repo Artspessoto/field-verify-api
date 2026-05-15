@@ -56,13 +56,16 @@ export class PrismaUsersRepository implements IUsersRepository {
     return users;
   }
 
-  async countMany(query: string): Promise<number> {
+  async countMany(query: string, role?: Role): Promise<number> {
     const count = await prisma.user.count({
       where: {
-        OR: [
-          { name: { contains: query, mode: "insensitive" } },
-          { email: { contains: query, mode: "insensitive" } },
-        ],
+        role: role,
+        OR: query
+          ? [
+              { name: { contains: query, mode: "insensitive" } },
+              { email: { contains: query, mode: "insensitive" } },
+            ]
+          : undefined,
       },
     });
 

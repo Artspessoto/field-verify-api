@@ -6,5 +6,5 @@ export interface IUsersRepository {
   findById(id: string): Promise<User | null>;
   save(user: User): Promise<User>;
   findMany(query: string, page: number, role?: Role): Promise<User[]>; //return list of users (filtered by role)
-  countMany(query: string): Promise<number>; //total number of records for pagination
+  countMany(query: string, role?: Role): Promise<number>; //total number of records for pagination
 }
