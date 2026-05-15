@@ -24,6 +24,26 @@ export const userResponseSchema = userSchema
     email_verified_at: z.coerce.date().nullable(),
   });
 
+export const updateProfileSchema = userSchema
+  .pick({
+    name: true,
+    email: true,
+  })
+  .partial();
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(6, "Senha antiga é obrigatória"),
+    newPassword: z
+      .string()
+      .min(6, "A nova senha deve ter no mínimo 6 caracteres"),
+    confirmPassword: z.string().min(6),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "The passwords don't match.",
+    path: ["confirmPassword"],
+  });
+
 export const searchSchema = z.object({
   query: z.string().default(""),
   page: z.coerce.number().min(1).default(1),

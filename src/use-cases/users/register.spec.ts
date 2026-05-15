@@ -1,7 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { InMemoryUsersRepository } from "~/repositories/in-memory/in-memory-users-repository";
 import { RegisterUseCase } from "./register";
-import { User } from "@prisma/client";
 import { compare } from "bcrypt";
 import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
 
@@ -16,19 +15,19 @@ describe("User register test", (): void => {
     });
 
     it("should able to register an user", async () => {
-      const response: User = await system.execute({
+      const { user } = await system.execute({
         name: "Maluco123",
         email: "maluco123@email.com",
         password: "4455669",
       });
 
-      expect(response.id).toEqual(expect.any(String));
+      expect(user.id).toEqual(expect.any(String));
     });
 
     it("should hash user password upon registration", async () => {
       const password = "my-secret-password";
 
-      const user = await system.execute({
+      const { user } = await system.execute({
         name: "ÓosCaraVéioKKKKKKKK",
         email: "apenas@hmm.com",
         password,
