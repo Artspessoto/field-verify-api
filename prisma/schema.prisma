@@ -29,8 +29,9 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  tokens Token[]
-  audits Audit[]
+  tokens      Token[]
+  audits      Audit[] @relation("AgentAudits")
+  evaluations Audit[] @relation("SupervisorEvaluations")
 
   @@map("users")
 }
@@ -75,11 +76,17 @@ model Audit {
   check_in_lat  Float
   check_in_long Float
 
-  user    User   @relation(fields: [user_id], references: [id])
+  user    User   @relation("AgentAudits", fields: [user_id], references: [id])
   user_id String
+
+  supervisor    User?   @relation("SupervisorEvaluations", fields: [supervisor_id], references: [id])
+  supervisor_id String?
 
   merchant    Merchant @relation(fields: [merchant_id], references: [id])
   merchant_id String
+
+  notes             String? //agent report
+  supervisor_review String? //supervisor review about agent audit
 
   @@index([user_id, check_in_at])
   @@map("audits")
