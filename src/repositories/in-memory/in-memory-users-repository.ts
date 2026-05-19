@@ -52,27 +52,37 @@ export class InMemoryUsersRepository implements IUsersRepository {
   }
 
   async findMany(query: string, page: number, role?: Role): Promise<User[]> {
-    return this.users
-      .filter((user) => {
-        //filter with case sensitive
-        const matches =
+    let filteredUsers: User[] = this.users;
+
+    if (query) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
           user.name.toLowerCase().includes(query.toLowerCase()) ||
-          user.email.toLowerCase().includes(query.toLowerCase());
+          user.email.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
 
-        //filter by role (without impediment if dont have role arg)
-        const matchesRole = role ? user.role == role : true;
+    if (role) {
+      filteredUsers = filteredUsers.filter((user) => user.role === role);
+    }
 
-        return matches && matchesRole;
-      })
-      .slice((page - 1) * 20, page * 20);
+    return filteredUsers.slice((page - 1) * 20, page * 20);
   }
 
-  async countMany(query: string): Promise<number> {
-    return this.users.filter((user) => {
-      return (
-        user.name.toLowerCase().includes(query.toLowerCase()) ||
-        user.email.toLowerCase().includes(query.toLowerCase())
+  async countMany(query: string, role?: Role): Promise<number> {
+    let filteredUsers = this.users;
+
+    if (query) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.name.toLowerCase().includes(query.toLowerCase()) ||
+          user.email.toLowerCase().includes(query.toLowerCase()),
       );
-    }).length;
+    }
+
+    if (role)
+      filteredUsers = filteredUsers.filter((user) => user.role === role);
+
+    return filteredUsers.length;
   }
 }

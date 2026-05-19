@@ -1,7 +1,7 @@
 import { IUsersRepository } from "~/repositories/users-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../errors/resource-not-found-error";
 import { compare, hash } from "bcrypt";
-import { InvalidCredentialsError } from "../errors/invalid-credentials-error";
+import { InvalidCredentialsError } from "../../errors/invalid-credentials-error";
 
 export interface IUpdateUserPasswordUseCaseReq {
   userId: string;

@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import { IUsersRepository } from "~/repositories/users-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
-import { UserAlreadyExistsError } from "../errors/user-already-exists-error";
+import { ResourceNotFoundError } from "../../errors/resource-not-found-error";
+import { UserAlreadyExistsError } from "../../errors/user-already-exists-error";
 
 export interface IUpdateUserProfileUseCaseReq {
   userId: string;
