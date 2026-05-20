@@ -1,6 +1,6 @@
 import { userSchema } from "~/schemas/user.schema";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { makeRegisterUseCase } from "~/use-cases/factories/make-register-use-case";
+import { makeRegisterUseCase } from "~/use-cases/factories/users/make-register-use-case";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const { name, email, password } = userSchema.parse(request.body);

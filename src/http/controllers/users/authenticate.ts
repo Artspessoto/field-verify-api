@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { authenticateSchema } from "~/schemas/authenticate.schema";
-import { makeAuthenticateUseCase } from "~/use-cases/factories/make-authenticate-use-case";
+import { makeAuthenticateUseCase } from "~/use-cases/factories/users/make-authenticate-use-case";
 import { setRefreshTokenCookie } from "~/utils/cookie-utils";
 
 export async function authenticate(

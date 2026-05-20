@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { changePasswordSchema } from "~/schemas/user.schema";
-import { makeUpdateUserPasswordUseCase } from "~/use-cases/factories/make-update-user-password-use-case";
+import { makeUpdateUserPasswordUseCase } from "~/use-cases/factories/users/make-update-user-password-use-case";
 
 export async function changePassword(
   request: FastifyRequest,

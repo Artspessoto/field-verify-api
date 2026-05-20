@@ -3,8 +3,8 @@ import { register } from "./register";
 import { authenticate } from "./authenticate";
 import { profile } from "./profile";
 import { seach } from "./search";
-import { verifyJWT } from "../middlewares/verify-jwt";
-import { verifyUserRole } from "../middlewares/verify-user-role";
+import { verifyJWT } from "../../middlewares/verify-jwt";
+import { verifyUserRole } from "../../middlewares/verify-user-role";
 import { updateProfile } from "./update-profile";
 import { changePassword } from "./change-password";
 

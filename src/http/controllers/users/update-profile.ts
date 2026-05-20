@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserMapper } from "~/mappers/user-mapper";
 import { updateProfileSchema } from "~/schemas/user.schema";
-import { makeUpdateUserProfileUseCase } from "~/use-cases/factories/make-update-user-profile.use-case";
+import { makeUpdateUserProfileUseCase } from "~/use-cases/factories/users/make-update-user-profile.use-case";
 
 export async function updateProfile(
   request: FastifyRequest,
