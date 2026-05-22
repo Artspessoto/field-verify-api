@@ -29,7 +29,8 @@ export class UpdateUserProfileUseCase {
       user.email = email;
     }
 
-    await this.usersRepository.save(user);
-    return { user };
+    const updatedUser = await this.usersRepository.save(user);
+
+    return { user: updatedUser };
   }
 }

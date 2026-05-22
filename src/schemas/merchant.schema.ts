@@ -19,4 +19,26 @@ export const merchantSchema = z.object({
   ),
 });
 
+export const updateMerchantSchema = merchantSchema
+  .pick({
+    name: true,
+    address: true,
+    latitude: true,
+    longitude: true,
+  })
+  .partial()
+  .extend({
+    is_active: z.boolean().optional(),
+  });
+
+export const merchantParamsSchema = z.object({
+  id: z.uuid("Invalid ID format"),
+});
+
+export const searchMerchantSchema = z.object({
+  query: z.string().default(""),
+  page: z.coerce.number().min(1).default(1),
+  isActive: z.boolean(),
+});
+
 export type MerchantSchema = z.infer<typeof merchantSchema>;
