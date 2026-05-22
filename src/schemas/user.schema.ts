@@ -1,8 +1,18 @@
+import { cpf } from "cpf-cnpj-validator";
 import z from "zod";
 
 export const userSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(3, "Name must contain at least 3 characters"),
+  document: z.string().refine(
+    (doc) => {
+      const cleanDoc = doc.replace(/\D/g, "");
+      return cpf.isValid(cleanDoc);
+    },
+    {
+      message: "Invalid document format.",
+    },
+  ),
   email: z
     .string()
     .email("Invalid email format")
@@ -28,15 +38,16 @@ export const updateProfileSchema = userSchema
   .pick({
     name: true,
     email: true,
+    document: true,
   })
   .partial();
 
 export const changePasswordSchema = z
   .object({
-    oldPassword: z.string().min(6, "Senha antiga é obrigatória"),
+    oldPassword: z.string().min(6, "Old password is required"),
     newPassword: z
       .string()
-      .min(6, "A nova senha deve ter no mínimo 6 caracteres"),
+      .min(6, "New password must contain at least 6 characters"),
     confirmPassword: z.string().min(6),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

@@ -7,13 +7,14 @@ export async function updateProfile(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { email, name } = updateProfileSchema.parse(request.body);
+  const { email, name, document } = updateProfileSchema.parse(request.body);
   const updateProfile = makeUpdateUserProfileUseCase();
 
   const { user } = await updateProfile.execute({
     userId: request.user.sub,
     email,
     name,
+    document,
   });
 
   return reply.status(204).send({
