@@ -1,6 +1,7 @@
 import { Prisma, Merchant } from "@prisma/client";
 import { IMerchantsRepository } from "../merchants-repository";
 import { randomUUID } from "node:crypto";
+import { getDistanceBetweenCoordinates } from "~/utils/get-distance-between-coordinates";
 
 export class InMemoryMerchantsRepository implements IMerchantsRepository {
   public merchants: Merchant[] = [];
@@ -57,9 +58,17 @@ export class InMemoryMerchantsRepository implements IMerchantsRepository {
     latitude: number;
     longitude: number;
   }): Promise<Merchant[]> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { latitude, longitude } = data;
-    throw new Error("Method not implemented.");
+
+    return this.merchants.filter((merchant) => {
+      const distance = getDistanceBetweenCoordinates(
+        { latitude, longitude },
+        { latitude: merchant.latitude, longitude: merchant.longitude },
+      );
+
+      //return merchants than are less 10km distance (with merchant active filter)
+      return distance < 10 && merchant.is_active === true;
+    });
   }
 
   async findMany(
