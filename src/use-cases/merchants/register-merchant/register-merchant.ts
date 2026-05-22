@@ -1,6 +1,6 @@
 import { Merchant } from "@prisma/client";
 import { IMerchantsRepository } from "~/repositories/merchants-repository";
-import { MerchantAlreadyExistsError } from "../errors/merchant-already-exists-error";
+import { MerchantAlreadyExistsError } from "~/use-cases/errors/merchant-already-exists-error";
 
 export interface IRegisterMerchantUseCaseReq {
   name: string;

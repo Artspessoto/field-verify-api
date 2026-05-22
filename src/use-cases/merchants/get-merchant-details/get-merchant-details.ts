@@ -1,6 +1,6 @@
 import { Merchant } from "@prisma/client";
 import { IMerchantsRepository } from "~/repositories/merchants-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "~/use-cases/errors/resource-not-found-error";
 
 export interface IGetMerchantDetailsUseCaseReq {
   merchantId: string;

@@ -1,7 +1,7 @@
 import { IMerchantsRepository } from "~/repositories/merchants-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "~/use-cases/errors/resource-not-found-error";
 import { Merchant } from "@prisma/client";
-import { IncompleteAddressUpdateError } from "../errors/incomplete-address-update-error";
+import { IncompleteAddressUpdateError } from "~/use-cases/errors/incomplete-address-update-error";
 
 export interface IUpdateMerchantsInfoUseCaseReq {
   id: string;

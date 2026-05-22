@@ -9,6 +9,7 @@ export class InMemoryUsersRepository implements IUsersRepository {
     const user: User = {
       id: data.id ?? randomUUID(),
       name: data.name,
+      document: data.document,
       email: data.email,
       password_hash: data.password_hash,
       role: data.role ?? "AGENT",
@@ -34,6 +35,14 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
   async findById(id: string): Promise<User | null> {
     const user = this.users.find((user) => user.id == id);
+
+    if (!user) return null;
+
+    return user;
+  }
+
+  async findByDocument(document: string): Promise<User | null> {
+    const user = this.users.find((user) => user.document == document);
 
     if (!user) return null;
 

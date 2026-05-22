@@ -14,10 +14,11 @@ describe("Update User Profile Use Case", () => {
     system = new UpdateUserProfileUseCase(usersRepository);
   });
 
-  it("should be able to update user profile name and email", async () => {
+  it("should be able to update user profile name, email and document", async () => {
     const createdUser = await usersRepository.create({
       name: "John Doe",
       email: "johndoe@example.com",
+      document: "214.099.400-04", //cpf generator
       password_hash: await hash("12346", 6),
     });
 
@@ -38,6 +39,7 @@ describe("Update User Profile Use Case", () => {
     const createdUser = await usersRepository.create({
       name: "John Doe",
       email: "johndoe@example.com",
+      document: "214.099.400-04", //cpf generator
       password_hash: await hash("123456", 6),
     });
 
@@ -63,12 +65,14 @@ describe("Update User Profile Use Case", () => {
     const user1 = await usersRepository.create({
       name: "John Doe",
       email: "johndoe@example.com",
+      document: "214.099.400-04", //cpf generator
       password_hash: await hash("123456", 6),
     });
 
     await usersRepository.create({
       name: "Alex Smith",
       email: "alex@example.com",
+      document: "214.099.400-04", //cpf generator
       password_hash: await hash("123456", 6),
     });
 

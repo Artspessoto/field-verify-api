@@ -17,6 +17,7 @@ describe("User register test", (): void => {
     it("should able to register an user", async () => {
       const { user } = await system.execute({
         name: "Maluco123",
+        document: "214.099.400-04", //cpf generator
         email: "maluco123@email.com",
         password: "4455669",
       });
@@ -29,6 +30,7 @@ describe("User register test", (): void => {
 
       const { user } = await system.execute({
         name: "ÓosCaraVéioKKKKKKKK",
+        document: "214.099.400-04", //cpf generator
         email: "apenas@hmm.com",
         password,
       });
@@ -45,6 +47,7 @@ describe("User register test", (): void => {
 
       await system.execute({
         name: "User 1",
+        document: "214.099.400-04", //cpf generator
         email,
         password: "password123",
       });
@@ -52,6 +55,7 @@ describe("User register test", (): void => {
       await expect(() =>
         system.execute({
           name: "User 2",
+          document: "214.099.400-04", //cpf generator
           email,
           password: "password123",
         }),
