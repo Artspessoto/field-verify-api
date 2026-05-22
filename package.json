@@ -12,6 +12,7 @@
     "test:cov": "vitest run --coverage",
     "lint": "eslint src/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
+    "seed": "tsx prisma/seed/seedAdminUser.ts",
     "prisma:init": "npx prisma init",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",

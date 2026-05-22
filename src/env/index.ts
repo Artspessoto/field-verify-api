@@ -14,6 +14,15 @@ try {
 const envSchema = z.object({
   NODE_ENV: z.enum(["dev", "test", "production"]).default("dev"),
   PORT: z.coerce.number().default(3333),
+  ENCRYPTION_KEY: z
+    .string()
+    .length(
+      32,
+      "The ENCRYPTION_KEY must be exactly 32 characters (bytes) long.",
+    ),
+  IV_KEY: z
+    .string()
+    .length(16, "The IV_KEY must bet exactly 16 characters (bytes) long"),
   JWT_SECRET: z.string().min(1, "JWT_SECRET is required for security"),
   DATABASE_URL: z.string().nonempty(),
   POSTGRES_USER: z.string(),
