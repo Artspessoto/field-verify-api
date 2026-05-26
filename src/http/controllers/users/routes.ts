@@ -14,21 +14,15 @@ export async function usersRoutes(app: FastifyInstance) {
   app.post("/sessions", authenticate);
 
   app.register(async (privateRoutes) => {
+    const adminProvider = { onRequest: verifyUserRole("ADMIN") };
     privateRoutes.addHook("onRequest", verifyJWT);
 
     privateRoutes.get("/profile", profile);
     privateRoutes.patch("/profile", updateProfile);
     privateRoutes.patch("/profile/password", changePassword);
 
-    privateRoutes.get(
-      "/users/list",
-      { onRequest: verifyUserRole("ADMIN") },
-      search,
-    );
-    privateRoutes.patch(
-      "/users/:id/deactivate",
-      { onRequest: verifyUserRole("ADMIN") },
-      deactivate,
-    );
+    privateRoutes.get("/users/list", adminProvider, search);
+    privateRoutes.patch("/users/:id/deactivate", adminProvider, deactivate);
+    privateRoutes.patch("/users/:id/activate", adminProvider, deactivate);
   });
 }
