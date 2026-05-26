@@ -38,7 +38,20 @@ export const merchantParamsSchema = z.object({
 export const searchMerchantSchema = z.object({
   query: z.string().default(""),
   page: z.coerce.number().min(1).default(1),
-  isActive: z.boolean(),
+  is_active: z.preprocess((val) => {
+    if (val === "true") return true;
+    if (val === "false") return false;
+    return undefined;
+  }, z.boolean().optional()),
+});
+
+export const nearbyMerchantsSchema = z.object({
+  latitude: z.coerce
+    .number()
+    .refine((val) => Math.abs(val) <= 90, "Invalid latitude"),
+  longitude: z.coerce
+    .number()
+    .refine((val) => Math.abs(val) <= 180, "Invalid longitude"),
 });
 
 export type MerchantSchema = z.infer<typeof merchantSchema>;

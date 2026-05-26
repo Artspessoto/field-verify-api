@@ -5,6 +5,7 @@ import { register } from "./register";
 import { search } from "./search";
 import { details } from "./details";
 import { update } from "./update";
+import { nearby } from "./nearby";
 
 export async function merchantsRoutes(app: FastifyInstance) {
   const adminProvider = { onRequest: [verifyUserRole("ADMIN")] };
@@ -15,4 +16,5 @@ export async function merchantsRoutes(app: FastifyInstance) {
   app.patch("/merchants/:id", adminProvider, update);
 
   app.get("/merchants/:id", details);
+  app.get("/merchants/nearby", nearby);
 }

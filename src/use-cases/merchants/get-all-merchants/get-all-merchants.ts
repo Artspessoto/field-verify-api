@@ -4,7 +4,7 @@ import { IMerchantsRepository } from "~/repositories/merchants-repository";
 export interface IGetAllMerchantsUseCaseReq {
   query: string;
   page: number;
-  isActive: boolean;
+  isActive?: boolean;
 }
 
 export interface IGetAllMerchantsUseCaseRes {
