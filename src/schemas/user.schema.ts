@@ -55,10 +55,19 @@ export const changePasswordSchema = z
     path: ["confirmPassword"],
   });
 
+export const userParamsSchema = z.object({
+  id: z.uuid("Invalid ID format"),
+});
+
 export const searchSchema = z.object({
   query: z.string().default(""),
   page: z.coerce.number().min(1).default(1),
   role: z.enum(["ADMIN", "AGENT"]).optional(),
+  is_active: z.preprocess((val) => {
+    if (val === "true") return true;
+    if (val === "false") return false;
+    return undefined;
+  }, z.boolean().optional()),
 });
 
 export type UserBodySchema = z.infer<typeof userSchema>;

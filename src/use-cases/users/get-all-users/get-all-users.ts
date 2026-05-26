@@ -5,6 +5,7 @@ export interface IGetAllUsersUseCaseReq {
   query: string;
   page: number;
   role?: Role;
+  isActive?: boolean;
 }
 
 export interface IGetAllUsersUseCaseRes {
@@ -19,10 +20,11 @@ export class GetAllUsersUseCase {
     query,
     page,
     role,
+    isActive,
   }: IGetAllUsersUseCaseReq): Promise<IGetAllUsersUseCaseRes> {
     const [users, totalCount] = await Promise.all([
-      await this.usersRepository.findMany(query, page, role),
-      await this.usersRepository.countMany(query, role),
+      this.usersRepository.findMany(query, page, role, isActive),
+      this.usersRepository.countMany(query, role, isActive),
     ]);
 
     return { users, totalCount };

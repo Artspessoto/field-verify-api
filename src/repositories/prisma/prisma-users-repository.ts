@@ -46,10 +46,16 @@ export class PrismaUsersRepository implements IUsersRepository {
     return updatedUser;
   }
 
-  async findMany(query: string, page: number, role?: Role): Promise<User[]> {
+  async findMany(
+    query: string,
+    page: number,
+    role?: Role,
+    isActive?: boolean,
+  ): Promise<User[]> {
     const users = await prisma.user.findMany({
       where: {
         role: role,
+        is_active: isActive,
         OR: query
           ? [
               { name: { contains: query, mode: "insensitive" } },
@@ -64,10 +70,15 @@ export class PrismaUsersRepository implements IUsersRepository {
     return users;
   }
 
-  async countMany(query: string, role?: Role): Promise<number> {
+  async countMany(
+    query: string,
+    role?: Role,
+    isActive?: boolean,
+  ): Promise<number> {
     const count = await prisma.user.count({
       where: {
         role: role,
+        is_active: isActive,
         OR: query
           ? [
               { name: { contains: query, mode: "insensitive" } },
