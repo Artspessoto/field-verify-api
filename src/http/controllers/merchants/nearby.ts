@@ -7,7 +7,7 @@ export async function nearby(request: FastifyRequest, reply: FastifyReply) {
 
   const fetchNearbyMerchants = makeFetchNearbyMerchants();
 
-  const merchants = await fetchNearbyMerchants.execute({
+  const { merchants } = await fetchNearbyMerchants.execute({
     userLatitude: latitude,
     userLongitude: longitude,
   });

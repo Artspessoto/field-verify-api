@@ -16,6 +16,7 @@ describe("Get All Users Use Case", () => {
     await usersRepository.create({
       name: "Arthur Spessoto",
       email: "arthur@example.com",
+      document: "316.508.050-04",
       password_hash: await hash("123456", 6),
       role: "AGENT",
     });
@@ -23,6 +24,7 @@ describe("Get All Users Use Case", () => {
     await usersRepository.create({
       name: "John Doe",
       email: "johndoe@example.com",
+      document: "316.508.050-04",
       password_hash: await hash("123456", 6),
       role: "AGENT",
     });
@@ -43,6 +45,7 @@ describe("Get All Users Use Case", () => {
       await usersRepository.create({
         name: `User ${i}`,
         email: `user${i}@example.com`,
+        document: `316.508.050-${i.toString().padStart(2, "0")}`,
         password_hash: await hash("123456", 6),
       });
     }
@@ -62,12 +65,14 @@ describe("Get All Users Use Case", () => {
     await usersRepository.create({
       name: "Arthur Spessoto",
       email: "arthur@example.com",
+      document: "316.508.050-04",
       password_hash: "hash",
     });
 
     await usersRepository.create({
       name: "John Doe",
       email: "johndoe@example.com",
+      document: "037.861.180-19",
       password_hash: "hash",
     });
 
@@ -85,6 +90,7 @@ describe("Get All Users Use Case", () => {
     await usersRepository.create({
       name: "Admin User",
       email: "admin@example.com",
+      document: "037.861.180-19",
       password_hash: "hash",
       role: "ADMIN",
     });
@@ -92,6 +98,7 @@ describe("Get All Users Use Case", () => {
     await usersRepository.create({
       name: "Agent User",
       email: "agent@example.com",
+      document: "037.861.180-20",
       password_hash: "hash",
       role: "AGENT",
     });

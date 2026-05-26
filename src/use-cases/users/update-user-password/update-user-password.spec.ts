@@ -18,6 +18,7 @@ describe("Update User Password Use Case", () => {
     const createdUser = await usersRepository.create({
       name: "Arthur Spessoto",
       email: "arthur@example.com",
+      document: "037.861.180-19",
       password_hash: await hash("old-password", 6),
     });
 
@@ -58,6 +59,7 @@ describe("Update User Password Use Case", () => {
     const createdUser = await usersRepository.create({
       name: "Arthur Spessoto",
       email: "arthur@example.com",
+      document: "037.861.180-19",
       password_hash: await hash("correct-password", 6),
     });
 
