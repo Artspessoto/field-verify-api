@@ -7,6 +7,9 @@ import { MaxDistanceError } from "../../errors/max-distance-error";
 import { MaxDailyAuditsError } from "../../errors/max-daily-audits-error";
 import { AgentHasPendingAuditError } from "../../errors/agent-has-pending-audit-error";
 import { Audit } from "@prisma/client";
+import { IUsersRepository } from "~/repositories/users-repository";
+import { UserDeactivatedError } from "~/use-cases/errors/user-deactivated-error";
+import { UserEmailNotVerifiedError } from "~/use-cases/errors/user-email-not-verified-error";
 
 export interface ICheckInUseCaseReq {
   userId: string;
@@ -19,6 +22,7 @@ export class CheckInUseCase {
   constructor(
     private auditsRepository: IAuditsRepository,
     private merchantsRepository: IMerchantsRepository,
+    private usersRepository: IUsersRepository,
   ) {}
 
   async execute({
@@ -27,9 +31,16 @@ export class CheckInUseCase {
     userLatitude,
     userLongitude,
   }: ICheckInUseCaseReq): Promise<{ audit: Audit }> {
-    const merchant = await this.merchantsRepository.findById(merchantId);
+    const [user, merchant] = await Promise.all([
+      this.usersRepository.findById(userId),
+      this.merchantsRepository.findById(merchantId),
+    ]);
 
+    if (!user) throw new ResourceNotFoundError();
     if (!merchant) throw new ResourceNotFoundError();
+
+    if (!user.is_active) throw new UserDeactivatedError();
+    if (!user.email_verified_at) throw new UserEmailNotVerifiedError();
 
     if (!merchant.is_active) throw new CannotAuditInactiveMerchantError();
 

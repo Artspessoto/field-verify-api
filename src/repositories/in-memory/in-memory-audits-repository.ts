@@ -11,13 +11,16 @@ export class InMemoryAuditsRepository implements IAuditsRepository {
       id: data.id ?? randomUUID(),
       status: data.status ?? "PENDING",
       check_in_at: data.check_in_at ? new Date(data.check_in_at) : new Date(),
-      validated_at: new Date(),
+      validated_at: data.validated_at ? new Date(data.validated_at) : null,
       check_in_lat: data.check_in_lat,
       check_in_long: data.check_in_long,
       user_id: data.user_id,
       supervisor_id: data.supervisor_id ?? null,
       merchant_id: data.merchant_id,
       notes: data.notes ?? null,
+      photos: Array.isArray(data.photos)
+        ? data.photos
+        : (data.photos?.set ?? []),
       supervisor_review: data.supervisor_review ?? null,
     };
 
