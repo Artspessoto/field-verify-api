@@ -32,7 +32,7 @@ export const updateMerchantSchema = merchantSchema
   });
 
 export const merchantParamsSchema = z.object({
-  id: z.uuid("Invalid ID format"),
+  id: z.uuid("Invalid merchant ID format. It must be a valid UUID."),
 });
 
 export const searchMerchantSchema = z.object({

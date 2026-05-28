@@ -14,7 +14,7 @@ export interface ISubmitAuditUseCaseReq {
   auditId: string;
   userId: string;
   photos: string[];
-  notes?: string;
+  notes?: string | null;
 }
 
 export class SubmitAuditUseCase {

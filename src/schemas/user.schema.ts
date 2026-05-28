@@ -56,7 +56,7 @@ export const changePasswordSchema = z
   });
 
 export const userParamsSchema = z.object({
-  id: z.uuid("Invalid ID format"),
+  id: z.uuid("Invalid user ID format. It must be a valid UUID."),
 });
 
 export const searchSchema = z.object({
