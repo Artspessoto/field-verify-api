@@ -44,6 +44,8 @@
   "dependencies": {
     "@fastify/cookie": "11.0.2",
     "@fastify/jwt": "10.0.0",
+    "@fastify/swagger": "9.7.0",
+    "@fastify/swagger-ui": "5.2.6",
     "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
     "bcrypt": "6.0.0",
@@ -52,6 +54,7 @@
     "eslint-plugin-prettier": "5.5.5",
     "fastify": "^5.8.5",
     "fastify-plugin": "5.1.0",
+    "fastify-type-provider-zod": "6.1.0",
     "jiti": "2.7.0",
     "zod": "4.4.3"
   }

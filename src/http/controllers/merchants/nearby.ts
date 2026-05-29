@@ -1,9 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { nearbyMerchantsSchema } from "~/schemas/merchant.schema";
+import { NearbyMerchantsSchema } from "~/schemas/merchant.schema";
 import { makeFetchNearbyMerchants } from "~/use-cases/factories/merchants/make-fetch-nearby-merchants-use-case";
 
-export async function nearby(request: FastifyRequest, reply: FastifyReply) {
-  const { latitude, longitude } = nearbyMerchantsSchema.parse(request.query);
+export async function nearby(
+  request: FastifyRequest<{ Querystring: NearbyMerchantsSchema }>,
+  reply: FastifyReply,
+) {
+  const { latitude, longitude } = request.query;
 
   const fetchNearbyMerchants = makeFetchNearbyMerchants();
 

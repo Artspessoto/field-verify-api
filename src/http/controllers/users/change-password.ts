@@ -1,16 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { changePasswordSchema } from "~/schemas/user.schema";
+import { ChangePasswordSchema } from "~/schemas/user.schema";
 import { makeUpdateUserPasswordUseCase } from "~/use-cases/factories/users/make-update-user-password-use-case";
 
 export async function changePassword(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Body: ChangePasswordSchema }>,
   reply: FastifyReply,
 ) {
-  const {
-    oldPassword,
-    newPassword,
-    confirmPassword: _,
-  } = changePasswordSchema.parse(request.body);
+  const { oldPassword, newPassword, confirmPassword: _ } = request.body;
   const updateUserPassword = makeUpdateUserPasswordUseCase();
 
   await updateUserPassword.execute({

@@ -8,21 +8,58 @@ import { verifyUserRole } from "../../middlewares/verify-user-role";
 import { updateProfile } from "./update-profile";
 import { changePassword } from "./change-password";
 import { deactivate } from "./deactivate";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
+import {
+  activateDoc,
+  authenticateDoc,
+  changePasswordDoc,
+  deactivateDoc,
+  profileDoc,
+  registerDoc,
+  searchDoc,
+  updateProfileDoc,
+} from "~/schemas/user.docs";
+import { activate } from "./activate";
 
 export async function usersRoutes(app: FastifyInstance) {
-  app.post("/users", register);
-  app.post("/sessions", authenticate);
+  const appWithZod = app.withTypeProvider<ZodTypeProvider>();
 
-  app.register(async (privateRoutes) => {
+  appWithZod.post("/users", { schema: registerDoc }, register);
+
+  appWithZod.post("/sessions", { schema: authenticateDoc }, authenticate);
+
+  appWithZod.register(async (privateRoutes) => {
+    const privateZodRoutes = privateRoutes.withTypeProvider<ZodTypeProvider>();
+
     const adminProvider = { onRequest: verifyUserRole("ADMIN") };
-    privateRoutes.addHook("onRequest", verifyJWT);
+    privateZodRoutes.addHook("onRequest", verifyJWT);
 
-    privateRoutes.get("/profile", profile);
-    privateRoutes.patch("/profile", updateProfile);
-    privateRoutes.patch("/profile/password", changePassword);
+    privateZodRoutes.get("/profile", { schema: profileDoc }, profile);
+    privateZodRoutes.patch(
+      "/profile",
+      { schema: updateProfileDoc },
+      updateProfile,
+    );
+    privateZodRoutes.patch(
+      "/profile/password",
+      { schema: changePasswordDoc },
+      changePassword,
+    );
 
-    privateRoutes.get("/users/list", adminProvider, search);
-    privateRoutes.patch("/users/:id/deactivate", adminProvider, deactivate);
-    privateRoutes.patch("/users/:id/activate", adminProvider, deactivate);
+    privateZodRoutes.get(
+      "/users/list",
+      { ...adminProvider, schema: searchDoc },
+      search,
+    );
+    privateZodRoutes.patch(
+      "/users/:id/deactivate",
+      { ...adminProvider, schema: deactivateDoc },
+      deactivate,
+    );
+    privateZodRoutes.patch(
+      "/users/:id/activate",
+      { ...adminProvider, schema: activateDoc },
+      activate,
+    );
   });
 }

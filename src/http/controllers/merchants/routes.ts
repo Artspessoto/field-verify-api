@@ -6,15 +6,40 @@ import { search } from "./search";
 import { details } from "./details";
 import { update } from "./update";
 import { nearby } from "./nearby";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
+import {
+  merchantDetailsDoc,
+  nearbyMerchantsDoc,
+  registerMerchantDoc,
+  searchMerchantsDoc,
+  updateMerchantDoc,
+} from "~/schemas/merchant.docs";
 
 export async function merchantsRoutes(app: FastifyInstance) {
-  const adminProvider = { onRequest: [verifyUserRole("ADMIN")] };
-  app.addHook("onRequest", verifyJWT);
+  const appWithZod = app.withTypeProvider<ZodTypeProvider>();
 
-  app.post("/merchants", adminProvider, register);
-  app.get("/merchants", adminProvider, search);
-  app.patch("/merchants/:id", adminProvider, update);
+  appWithZod.addHook("onRequest", verifyJWT);
 
-  app.get("/merchants/:id", details);
-  app.get("/merchants/nearby", nearby);
+  const adminProvider = { onRequest: verifyUserRole("ADMIN") };
+
+  //only admin
+  appWithZod.post(
+    "/merchants",
+    { ...adminProvider, schema: registerMerchantDoc },
+    register,
+  );
+  appWithZod.get(
+    "/merchants",
+    { ...adminProvider, schema: searchMerchantsDoc },
+    search,
+  );
+  appWithZod.patch(
+    "/merchants/:id",
+    { ...adminProvider, schema: updateMerchantDoc },
+    update,
+  );
+
+  //agent
+  appWithZod.get("/merchants/:id", { schema: merchantDetailsDoc }, details);
+  appWithZod.get("/merchants/nearby", { schema: nearbyMerchantsDoc }, nearby);
 }

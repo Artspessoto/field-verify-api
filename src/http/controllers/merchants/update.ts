@@ -1,14 +1,19 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
-  merchantParamsSchema,
-  updateMerchantSchema,
+  MerchantParamsSchema,
+  UpdateMerchantSchema,
 } from "~/schemas/merchant.schema";
 import { makeUpdateMerchantUseCase } from "~/use-cases/factories/merchants/make-update-merchant-use-case";
 
-export async function update(request: FastifyRequest, reply: FastifyReply) {
-  const { id } = merchantParamsSchema.parse(request.params);
-  const { name, address, is_active, latitude, longitude } =
-    updateMerchantSchema.parse(request.body);
+export async function update(
+  request: FastifyRequest<{
+    Body: UpdateMerchantSchema;
+    Params: MerchantParamsSchema;
+  }>,
+  reply: FastifyReply,
+) {
+  const { id } = request.params;
+  const { name, address, is_active, latitude, longitude } = request.body;
 
   const updateMerchantInfo = makeUpdateMerchantUseCase();
 
@@ -21,5 +26,5 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
     longitude,
   });
 
-  return reply.status(200).send(merchant);
+  return reply.status(200).send({ merchant });
 }

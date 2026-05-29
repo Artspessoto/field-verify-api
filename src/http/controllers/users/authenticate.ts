@@ -1,13 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { authenticateSchema } from "~/schemas/authenticate.schema";
+import { AuthenticateBodySchema } from "~/schemas/authenticate.schema";
 import { makeAuthenticateUseCase } from "~/use-cases/factories/users/make-authenticate-use-case";
 import { setRefreshTokenCookie } from "~/utils/cookie-utils";
 
 export async function authenticate(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Body: AuthenticateBodySchema }>,
   reply: FastifyReply,
 ) {
-  const { email, password } = authenticateSchema.parse(request.body);
+  const { email, password } = request.body;
 
   const authenticateUseCase = makeAuthenticateUseCase();
 

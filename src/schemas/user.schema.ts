@@ -72,3 +72,7 @@ export const searchSchema = z.object({
 
 export type UserBodySchema = z.infer<typeof userSchema>;
 export type UserResponse = z.infer<typeof userResponseSchema>;
+export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
+export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;
+export type UserParamsSchema = z.infer<typeof userParamsSchema>;
+export type SearchSchema = z.infer<typeof searchSchema>;

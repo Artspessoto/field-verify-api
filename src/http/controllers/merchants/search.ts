@@ -1,9 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { searchMerchantSchema } from "~/schemas/merchant.schema";
+import { SearchMerchantSchema } from "~/schemas/merchant.schema";
 import { makeGetAllMerchantsUseCase } from "~/use-cases/factories/merchants/make-get-all-merchants-use-case";
 
-export async function search(request: FastifyRequest, reply: FastifyReply) {
-  const { page, is_active, query } = searchMerchantSchema.parse(request.query);
+export async function search(
+  request: FastifyRequest<{ Querystring: SearchMerchantSchema }>,
+  reply: FastifyReply,
+) {
+  const { page, is_active, query } = request.query;
   const getAllMerchants = makeGetAllMerchantsUseCase();
 
   const { merchants, totalCount } = await getAllMerchants.execute({

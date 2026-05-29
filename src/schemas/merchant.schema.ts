@@ -19,6 +19,13 @@ export const merchantSchema = z.object({
   ),
 });
 
+export const merchantResponseSchema = merchantSchema.extend({
+  id: z.uuid(),
+  is_active: z.boolean(),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
+});
+
 export const updateMerchantSchema = merchantSchema
   .pick({
     name: true,
@@ -55,3 +62,7 @@ export const nearbyMerchantsSchema = z.object({
 });
 
 export type MerchantSchema = z.infer<typeof merchantSchema>;
+export type UpdateMerchantSchema = z.infer<typeof updateMerchantSchema>;
+export type MerchantParamsSchema = z.infer<typeof merchantParamsSchema>;
+export type SearchMerchantSchema = z.infer<typeof searchMerchantSchema>;
+export type NearbyMerchantsSchema = z.infer<typeof nearbyMerchantsSchema>;

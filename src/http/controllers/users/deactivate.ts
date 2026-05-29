@@ -1,9 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { userParamsSchema } from "~/schemas/user.schema";
+import { UserParamsSchema } from "~/schemas/user.schema";
 import { makeDeactivateUserUseCase } from "~/use-cases/factories/users/make-deactivate-user-use-case";
 
-export async function deactivate(request: FastifyRequest, reply: FastifyReply) {
-  const { id } = userParamsSchema.parse(request.params);
+export async function deactivate(
+  request: FastifyRequest<{ Params: UserParamsSchema }>,
+  reply: FastifyReply,
+) {
+  const { id } = request.params;
 
   const deactivateUseCase = makeDeactivateUserUseCase();
 

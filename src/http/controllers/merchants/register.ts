@@ -1,10 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { merchantSchema } from "~/schemas/merchant.schema";
+import { MerchantSchema } from "~/schemas/merchant.schema";
 import { makeRegisterMerchantUseCase } from "~/use-cases/factories/merchants/make-register-merchant-use-case";
 
-export async function register(request: FastifyRequest, reply: FastifyReply) {
+export async function register(
+  request: FastifyRequest<{ Body: MerchantSchema }>,
+  reply: FastifyReply,
+) {
   const { name, address, latitude, longitude, tax_identification } =
-    merchantSchema.parse(request.body);
+    request.body;
 
   const registerMerchantUseCase = makeRegisterMerchantUseCase();
 
