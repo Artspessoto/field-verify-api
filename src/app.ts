@@ -10,6 +10,8 @@ import {
   validatorCompiler,
 } from "fastify-type-provider-zod";
 import fastifyRateLimit from "@fastify/rate-limit";
+import fastifyHelmet from "@fastify/helmet";
+import fastifyCors from "@fastify/cors";
 
 export const app = fastify({
   logger: {
@@ -19,6 +21,13 @@ export const app = fastify({
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
+
+app.register(fastifyHelmet); //header protection
+
+app.register(fastifyCors, {
+  origin: true,
+  credentials: true,
+});
 
 app.register(fastifyRateLimit, {
   max: 100, //request limit
