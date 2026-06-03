@@ -23,7 +23,7 @@ export class OverrideAuditDecisionUseCase {
 
     if (!audit) throw new ResourceNotFoundError();
 
-    if (audit.status == "PENDING" || audit.status == "IN_REVIEW")
+    if (audit.status === "PENDING" || audit.status === "IN_REVIEW")
       throw new AuditNotEvaluatedError();
 
     audit.status = newStatus;

@@ -1,12 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import {
-  submitAuditParamsSchema,
-  submitAuditSchema,
-} from "~/schemas/audit.schema";
+import { auditParamsSchema, submitAuditSchema } from "~/schemas/audit.schema";
 import { makeSubmitAuditUseCase } from "~/use-cases/factories/audits/make-submit-audit-use-case";
 
 export async function submit(request: FastifyRequest, reply: FastifyReply) {
-  const { audit_id } = submitAuditParamsSchema.parse(request.params);
+  const { audit_id } = auditParamsSchema.parse(request.params);
   const { photos, notes } = submitAuditSchema.parse(request.body);
 
   const submitAudit = makeSubmitAuditUseCase();
