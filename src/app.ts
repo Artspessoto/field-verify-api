@@ -9,6 +9,7 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod";
+import fastifyRateLimit from "@fastify/rate-limit";
 
 export const app = fastify({
   logger: {
@@ -18,6 +19,11 @@ export const app = fastify({
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
+
+app.register(fastifyRateLimit, {
+  max: 100, //request limit
+  timeWindow: "1 minute",
+});
 
 app.register(authPlugin);
 app.register(swaggerPlugin);
