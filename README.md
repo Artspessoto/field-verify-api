@@ -12,6 +12,11 @@ The concept is straightforward: instead of relying solely on documents submitted
 
 - **Access Control (RBAC):** Permissions are strictly separated between what an Agent (field visitor) can perform and what a Supervisor (report reviewer) can access.
 
+### Geolocation Validation
+
+- **Summary:** Detailed rules and practical examples for agent check-in distance calculations. The system enforces a maximum allowed distance of 100 meters to start an audit and documents degree-to-distance approximations used in validation.
+- **Details:** See [docs/geolocation-validation.md](docs/geolocation-validation.md) for calculation methods, latitude-offset examples, and rationale.
+
 # Tech Stack
 
 - Node.js & Fastify
@@ -26,11 +31,11 @@ The concept is straightforward: instead of relying solely on documents submitted
 
 ### Access Management
 
-- [ ] User Registration: Ability to register agents and supervisors.
-- [ ] Authentication: Login via email and password (JWT).
+- [x] User Registration: Ability to register agents and supervisors.
+- [x] Authentication: Login via email and password (JWT).
 - [ ] Identity Verification: Email verification through tokens.
 - [ ] Password Recovery: Request password changes via email.
-- [ ] Profile: Access the profile data of the currently logged-in user.
+- [x] Profile: Access the profile data of the currently logged-in user.
 
 ### Field Operations
 
@@ -80,6 +85,6 @@ npm run prisma:migrate -- --name initial_schema
 # Dev mode
 npm run start:dev
 
-# Prima Studio (visual interface)
+# Prisma Studio (visual interface)
 npm run prisma:studio
 ```

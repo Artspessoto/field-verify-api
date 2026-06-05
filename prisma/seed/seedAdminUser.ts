@@ -1,14 +1,14 @@
 import { User } from "@prisma/client";
 import { hash } from "bcrypt";
-import prisma from "~/lib/prisma";
-import { UserBodySchema } from "~/schemas/user.schema";
-import { encrypt } from "~/utils/crypto";
+import prisma from "../../src/lib/prisma";
+import { UserBodySchema } from "../../src/schemas/user.schema";
+import { encrypt } from "../../src/utils/crypto";
 
 async function createAdminUser(): Promise<User | void> {
   const adminData: UserBodySchema = {
     name: "Posso ser adm?",
     email: "admin@example.com",
-    document: "00000000000",
+    document: "52998224725", //valid cpf for test
     password: "admin123",
     role: "ADMIN",
   };

@@ -29,6 +29,7 @@ export const userResponseSchema = userSchema
     password: true,
   })
   .extend({
+    document: z.string(),
     created_at: z.coerce.date(),
     updated_at: z.coerce.date(),
     email_verified_at: z.coerce.date().nullable(),
