@@ -4,3 +4,4 @@ build
 /src/generated/prisma
 postgres_data/
 coverage
+minio_data

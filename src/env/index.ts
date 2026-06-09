@@ -14,6 +14,7 @@ try {
 const envSchema = z.object({
   NODE_ENV: z.enum(["dev", "test", "production"]).default("dev"),
   PORT: z.coerce.number().default(3333),
+  AWS_REGION: z.string().default("us-east-1"),
   ENCRYPTION_KEY: z
     .string()
     .length(
@@ -28,6 +29,9 @@ const envSchema = z.object({
   POSTGRES_USER: z.string(),
   POSTGRES_PASSWORD: z.string(),
   POSTGRES_DB: z.string(),
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_ENDPOINT_URL: z.url().optional(),
 });
 
 const _env = envSchema.safeParse(process.env);
