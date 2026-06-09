@@ -71,13 +71,20 @@ model Merchant {
 }
 
 model Audit {
-  id           String      @id @default(uuid())
-  status       AuditStatus @default(PENDING)
-  check_in_at  DateTime    @default(now())
+  id     String      @id @default(uuid())
+  status AuditStatus @default(PENDING)
+
+  check_in_at  DateTime  @default(now())
+  check_out_at DateTime?
+
   validated_at DateTime?
+  updated_at   DateTime  @updatedAt
 
   check_in_lat  Float
   check_in_long Float
+
+  check_out_lat  Float?
+  check_out_long Float?
 
   user    User   @relation("AgentAudits", fields: [user_id], references: [id])
   user_id String
