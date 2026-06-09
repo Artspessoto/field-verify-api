@@ -4,7 +4,9 @@ import { makeSubmitAuditUseCase } from "~/use-cases/factories/audits/make-submit
 
 export async function submit(request: FastifyRequest, reply: FastifyReply) {
   const { audit_id } = auditParamsSchema.parse(request.params);
-  const { photos, notes } = submitAuditSchema.parse(request.body);
+  const { photos, notes, latitude, longitude } = submitAuditSchema.parse(
+    request.body,
+  );
 
   const submitAudit = makeSubmitAuditUseCase();
 
@@ -13,7 +15,9 @@ export async function submit(request: FastifyRequest, reply: FastifyReply) {
     auditId: audit_id,
     photos,
     notes,
+    userLatitude: latitude,
+    userLongitude: longitude,
   });
 
-  return reply.status(201).send({ audit });
+  return reply.status(200).send({ audit });
 }

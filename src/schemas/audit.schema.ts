@@ -40,6 +40,12 @@ export const submitAuditSchema = z.object({
     .min(3, "You must provide at least 3 photos to complete the audit."),
 
   notes: z.string({ message: "Notes must be a text string." }).nullish(),
+  latitude: z.number().refine((value) => {
+    return Math.abs(value) <= 90;
+  }),
+  longitude: z.number().refine((value) => {
+    return Math.abs(value) <= 180;
+  }),
 });
 
 export const agentAuditsHistoryQuerySchema = z.object({
