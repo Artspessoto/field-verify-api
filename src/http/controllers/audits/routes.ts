@@ -8,6 +8,7 @@ import { evaluate } from "./evaluate";
 import { override } from "./override";
 import { details } from "./details";
 import { history } from "./history";
+import { uploadPhotos } from "./upload-photos";
 
 export async function auditsRoutes(app: FastifyInstance) {
   app.addHook("onRequest", verifyJWT);
@@ -21,6 +22,7 @@ export async function auditsRoutes(app: FastifyInstance) {
 
   //agent and admin (can view own/assigned audits)
   app.get("/audits/:audit_id", details);
+  app.post("/audits/:audit_id/upload-url", uploadPhotos);
 
   //admin
   app.get("/audits", adminProvider, search);

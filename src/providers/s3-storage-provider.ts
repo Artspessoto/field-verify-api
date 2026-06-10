@@ -21,15 +21,18 @@ export class S3StorageProvider {
   async generateUpload(
     fileName: string,
     contentType: string,
+    auditId: string,
   ): Promise<{ uploadUrl: string; finalUrl: string }> {
     //avoid repeated names
     const uniqueFileName = `${randomUUID()}-${fileName}`;
 
     const bucket = "fieldverify-uploads";
 
+    const fileKey = `audits/${auditId}/${uniqueFileName}`;
+
     const command = new PutObjectCommand({
       Bucket: bucket,
-      Key: uniqueFileName,
+      Key: fileKey,
       ContentType: contentType,
     });
 
@@ -38,7 +41,7 @@ export class S3StorageProvider {
       expiresIn: 600,
     });
 
-    const finalUrl = `${env.AWS_ENDPOINT_URL}/${bucket}/${uniqueFileName}`;
+    const finalUrl = `${env.AWS_ENDPOINT_URL}/${bucket}/${fileKey}`;
 
     return { uploadUrl, finalUrl };
   }

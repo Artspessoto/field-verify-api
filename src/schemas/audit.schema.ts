@@ -62,3 +62,16 @@ export const searchAuditsQuerySchema = z.object({
 export const auditParamsSchema = z.object({
   audit_id: z.uuid("Invalid audit ID format. It must be a valid UUID."),
 });
+
+export const uploadPhotosSchema = z.object({
+  files: z
+    .array(
+      z.object({
+        fileName: z.string(),
+        contentType: z
+          .string()
+          .regex(/^image\//, "Only image files are allowed"),
+      }),
+    )
+    .min(3, "You must provide metadata for at least 3 photos."),
+});
