@@ -22,6 +22,10 @@ export class InMemoryAuditsRepository implements IAuditsRepository {
         ? data.photos
         : (data.photos?.set ?? []),
       supervisor_review: data.supervisor_review ?? null,
+      check_out_at: data.check_out_at ? new Date(data.check_out_at) : null,
+      updated_at: new Date(),
+      check_out_lat: data.check_out_lat ?? null,
+      check_out_long: data.check_out_long ?? null,
     };
 
     this.audits.push(audit);

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { S3StorageProvider } from "~/providers/s3-storage-provider";
 import { auditParamsSchema, uploadPhotosSchema } from "~/schemas/audit.schema";
+import { MakeGenerateUploadUrlsUseCase } from "~/use-cases/factories/audits/make-generate-upload-urls-use-case";
 
 export async function uploadPhotos(
   request: FastifyRequest,
@@ -9,13 +9,13 @@ export async function uploadPhotos(
   const { audit_id } = auditParamsSchema.parse(request.params);
   const { files } = uploadPhotosSchema.parse(request.body);
 
-  const storageProvider = new S3StorageProvider();
+  const generateUploadUrls = MakeGenerateUploadUrlsUseCase();
 
-  const urlsData = await Promise.all(
-    files.map((file) =>
-      storageProvider.generateUpload(file.fileName, file.contentType, audit_id),
-    ),
-  );
+  const { urls } = await generateUploadUrls.execute({
+    userId: request.user.sub,
+    auditId: audit_id,
+    files,
+  });
 
-  return reply.status(200).send({ urls: urlsData });
+  return reply.status(200).send({ urls });
 }
