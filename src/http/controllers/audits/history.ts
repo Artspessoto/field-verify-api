@@ -1,9 +1,12 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { agentAuditsHistoryQuerySchema } from "~/schemas/audit.schema";
+import { AgentAuditsHistoryQuerySchema } from "~/schemas/audit.schema";
 import { makeFetchAgentsAuditsUseCase } from "~/use-cases/factories/audits/make-fetch-agent-audits-use-case";
 
-export async function history(request: FastifyRequest, reply: FastifyReply) {
-  const { page } = agentAuditsHistoryQuerySchema.parse(request.query);
+export async function history(
+  request: FastifyRequest<{ Querystring: AgentAuditsHistoryQuerySchema }>,
+  reply: FastifyReply,
+) {
+  const { page } = request.query;
   const fetchAgentAuditsHistory = makeFetchAgentsAuditsUseCase();
   const { audits, totalCount } = await fetchAgentAuditsHistory.execute({
     userId: request.user.sub,

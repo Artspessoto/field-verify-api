@@ -1,13 +1,19 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { auditParamsSchema, uploadPhotosSchema } from "~/schemas/audit.schema";
+import {
+  AuditParamsSchema,
+  UploadPhotosBodySchema,
+} from "~/schemas/audit.schema";
 import { MakeGenerateUploadUrlsUseCase } from "~/use-cases/factories/audits/make-generate-upload-urls-use-case";
 
 export async function uploadPhotos(
-  request: FastifyRequest,
+  request: FastifyRequest<{
+    Params: AuditParamsSchema;
+    Body: UploadPhotosBodySchema;
+  }>,
   reply: FastifyReply,
 ) {
-  const { audit_id } = auditParamsSchema.parse(request.params);
-  const { files } = uploadPhotosSchema.parse(request.body);
+  const { audit_id } = request.params;
+  const { files } = request.body;
 
   const generateUploadUrls = MakeGenerateUploadUrlsUseCase();
 

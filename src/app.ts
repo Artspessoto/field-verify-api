@@ -12,6 +12,7 @@ import {
 import fastifyRateLimit from "@fastify/rate-limit";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyCors from "@fastify/cors";
+import { auditsRoutes } from "./http/controllers/audits/routes";
 
 export const app = fastify({
   logger: {
@@ -39,5 +40,6 @@ app.register(swaggerPlugin);
 
 app.register(usersRoutes);
 app.register(merchantsRoutes);
+app.register(auditsRoutes);
 
 app.setErrorHandler(errorHandler);

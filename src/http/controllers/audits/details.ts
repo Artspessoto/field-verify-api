@@ -1,10 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { auditParamsSchema } from "~/schemas/audit.schema";
+import { AuditParamsSchema } from "~/schemas/audit.schema";
 import { makeGetAuditDetailsUseCase } from "~/use-cases/factories/audits/make-get-audit-details-use-case";
 
-export async function details(request: FastifyRequest, reply: FastifyReply) {
+export async function details(
+  request: FastifyRequest<{ Params: AuditParamsSchema }>,
+  reply: FastifyReply,
+) {
   const getAuditDetails = makeGetAuditDetailsUseCase();
-  const { audit_id } = auditParamsSchema.parse(request.params);
+  const { audit_id } = request.params;
 
   const { audit } = await getAuditDetails.execute({
     auditId: audit_id,

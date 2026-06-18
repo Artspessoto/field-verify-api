@@ -1,15 +1,20 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
-  auditParamsSchema,
-  evaluateAuditBodySchema,
+  AuditParamsSchema,
+  EvaluateAuditBodySchema,
 } from "~/schemas/audit.schema";
 import { makeEvaluateAuditUseCase } from "~/use-cases/factories/audits/make-evaluate-audit-use-case";
 
-export async function evaluate(request: FastifyRequest, reply: FastifyReply) {
-  const { audit_id } = auditParamsSchema.parse(request.params);
-  const { status, supervisor_review } = evaluateAuditBodySchema.parse(
-    request.body,
-  );
+export async function evaluate(
+  request: FastifyRequest<{
+    Params: AuditParamsSchema;
+    Body: EvaluateAuditBodySchema;
+  }>,
+  reply: FastifyReply,
+) {
+  const { audit_id } = request.params;
+  const { status, supervisor_review } = request.body;
+
   const evaluateAudit = makeEvaluateAuditUseCase();
 
   const { audit } = await evaluateAudit.execute({

@@ -1,13 +1,19 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
-  checkInSchemaParams,
-  createCheckInBodySchema,
+  CheckInSchemaParams,
+  CreateCheckInBodySchema,
 } from "~/schemas/audit.schema";
 import { makeCheckInUseCase } from "~/use-cases/factories/audits/make-check-in-use-case";
 
-export async function checkIn(request: FastifyRequest, reply: FastifyReply) {
-  const { latitude, longitude } = createCheckInBodySchema.parse(request.body);
-  const { merchant_id } = checkInSchemaParams.parse(request.params);
+export async function checkIn(
+  request: FastifyRequest<{
+    Body: CreateCheckInBodySchema;
+    Params: CheckInSchemaParams;
+  }>,
+  reply: FastifyReply,
+) {
+  const { latitude, longitude } = request.body;
+  const { merchant_id } = request.params;
   const checkInAudit = makeCheckInUseCase();
 
   const { audit } = await checkInAudit.execute({

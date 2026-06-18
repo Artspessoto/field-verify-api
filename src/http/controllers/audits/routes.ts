@@ -9,23 +9,52 @@ import { override } from "./override";
 import { details } from "./details";
 import { history } from "./history";
 import { uploadPhotos } from "./upload-photos";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
+import {
+  checkInDoc,
+  detailsDoc,
+  evaluateDoc,
+  historyDoc,
+  overrideDoc,
+  searchDoc,
+  submitDoc,
+  uploadPhotosDoc,
+} from "~/schemas/audit.docs";
 
 export async function auditsRoutes(app: FastifyInstance) {
-  app.addHook("onRequest", verifyJWT);
+  const appWithZod = app.withTypeProvider<ZodTypeProvider>();
+
+  appWithZod.addHook("onRequest", verifyJWT);
 
   const adminProvider = { onRequest: verifyUserRole("ADMIN") };
 
   //agent
-  app.post("/audits/check-in/:merchant_id", checkIn);
-  app.patch("/audits/:audit_id/submit", submit);
-  app.get("/audits/history", history);
+  appWithZod.post(
+    "/audits/check-in/:merchant_id",
+    { schema: checkInDoc },
+    checkIn,
+  );
+  appWithZod.patch("/audits/:audit_id/submit", { schema: submitDoc }, submit);
+  appWithZod.get("/audits/history", { schema: historyDoc }, history);
 
   //agent and admin (can view own/assigned audits)
-  app.get("/audits/:audit_id", details);
-  app.post("/audits/:audit_id/upload-url", uploadPhotos);
+  appWithZod.get("/audits/:audit_id", { schema: detailsDoc }, details);
+  appWithZod.post(
+    "/audits/:audit_id/upload-url",
+    { schema: uploadPhotosDoc },
+    uploadPhotos,
+  );
 
   //admin
-  app.get("/audits", adminProvider, search);
-  app.patch("/audits/:audit_id/evaluate", adminProvider, evaluate);
-  app.patch("/audits/:audit_id/override", adminProvider, override);
+  appWithZod.get("/audits", { ...adminProvider, schema: searchDoc }, search);
+  appWithZod.patch(
+    "/audits/:audit_id/evaluate",
+    { ...adminProvider, schema: evaluateDoc },
+    evaluate,
+  );
+  appWithZod.patch(
+    "/audits/:audit_id/override",
+    { ...adminProvider, schema: overrideDoc },
+    override,
+  );
 }

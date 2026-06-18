@@ -100,6 +100,7 @@ export const uploadPhotosSchema = z.object({
 });
 
 export type CreateCheckInBodySchema = z.infer<typeof createCheckInBodySchema>;
+export type CheckInSchemaParams = z.infer<typeof checkInSchemaParams>;
 export type EvaluateAuditBodySchema = z.infer<typeof evaluateAuditBodySchema>;
 export type OverrideAuditBodySchema = z.infer<typeof overrideAuditBodySchema>;
 export type SubmitAuditBodySchema = z.infer<typeof submitAuditSchema>;
