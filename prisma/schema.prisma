@@ -19,6 +19,11 @@ enum AuditStatus {
   FRAUD_SUSPECT
 }
 
+enum TokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
 model User {
   id                String    @id @default(uuid())
   name              String
@@ -40,13 +45,13 @@ model User {
 }
 
 model Token {
-  id         String   @id @default(uuid())
-  token      String   @unique
-  type       String
+  id         String    @id @default(uuid())
+  token      String    @unique @default(uuid())
+  type       TokenType
   expires_at DateTime
-  created_at DateTime @default(now())
+  created_at DateTime  @default(now())
 
-  user    User   @relation(fields: [user_id], references: [id])
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id String
 
   @@map("tokens")

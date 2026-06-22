@@ -39,17 +39,17 @@ The concept is straightforward: instead of relying solely on documents submitted
 
 ### Field Operations
 
-- [ ] Proximity Search: Find merchants within a 10km radius.
-- [ ] Merchant Search: Search for merchants by name or CNPJ (Tax ID).
-- [ ] Audit Check-in: Perform a check-in upon arrival at the merchant's location.
-- [ ] Photographic Evidence: Agents must attach at least 3 photos (frontage, interior, and proof of address) to complete the audit.
-- [ ] Validation: Complete the audit only after the minimum required stay duration.
-- [ ] History: Access the audit history performed by the agent.
+- [x] Proximity Search: Find merchants within a 10km radius.
+- [x] Merchant Search: Search for merchants by name or CNPJ (Tax ID).
+- [x] Audit Check-in: Perform a check-in upon arrival at the merchant's location.
+- [x] Photographic Evidence: Agents must attach at least 3 photos (frontage, interior, and proof of address) to complete the audit.
+- [x] Validation: Complete the audit only after the minimum required stay duration.
+- [x] History: Access the audit history performed by the agent.
 
 ### Administrative
 
-- [ ] Merchant Management: Register and edit merchants for the audit queue.
-- [ ] Monitoring: Supervisors can view audits flagged as suspicious of fraud.
+- [x] Merchant Management: Register and edit merchants for the audit queue.
+- [x] Monitoring: Supervisors can view audits flagged as suspicious of fraud.
 
 ## Business Rules
 
