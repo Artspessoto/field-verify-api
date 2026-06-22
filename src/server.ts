@@ -8,7 +8,7 @@ const start = () => {
         host: "0.0.0.0",
         port: env.PORT,
       })
-      .then(() => console.log(`HTTP Server Running on port ${env.PORT}`));
+      .then(() => app.log.info(`HTTP Server Running on port ${env.PORT}`));
   } catch (err) {
     app.log.error(err);
     process.exit(1);
