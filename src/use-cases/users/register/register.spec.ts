@@ -3,15 +3,18 @@ import { InMemoryUsersRepository } from "~/repositories/in-memory/in-memory-user
 import { RegisterUseCase } from "./register";
 import { compare } from "bcrypt";
 import { UserAlreadyExistsError } from "../../errors/user-already-exists-error";
+import { InMemoryTokensRepository } from "~/repositories/in-memory/in-memory-tokens-repository";
 
 let usersRepository: InMemoryUsersRepository;
+let tokensRepository: InMemoryTokensRepository;
 let system: RegisterUseCase;
 
 describe("User register test", (): void => {
   describe("when registering an user", () => {
     beforeEach(() => {
       usersRepository = new InMemoryUsersRepository();
-      system = new RegisterUseCase(usersRepository);
+      tokensRepository = new InMemoryTokensRepository();
+      system = new RegisterUseCase(usersRepository, tokensRepository);
     });
 
     it("should able to register an user", async () => {
