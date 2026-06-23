@@ -1,4 +1,4 @@
-import { S3StorageProvider } from "~/providers/s3-storage-provider";
+import { S3StorageProvider } from "~/providers/s3/s3-storage-provider";
 import { PrismaAuditsRepository } from "~/repositories/prisma/prisma-audits-repository";
 import { GenerateUploadUrlsUseCase } from "~/use-cases/audits/generate-upload-urls/generate-upload-urls";
 

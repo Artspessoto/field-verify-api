@@ -4,9 +4,11 @@ import { RegisterUseCase } from "./register";
 import { compare } from "bcrypt";
 import { UserAlreadyExistsError } from "../../errors/user-already-exists-error";
 import { InMemoryTokensRepository } from "~/repositories/in-memory/in-memory-tokens-repository";
+import { InMemoryMailProvider } from "~/providers/in-memory/in-memory-mail-provider";
 
 let usersRepository: InMemoryUsersRepository;
 let tokensRepository: InMemoryTokensRepository;
+let mailProvider: InMemoryMailProvider;
 let system: RegisterUseCase;
 
 describe("User register test", (): void => {
@@ -14,7 +16,13 @@ describe("User register test", (): void => {
     beforeEach(() => {
       usersRepository = new InMemoryUsersRepository();
       tokensRepository = new InMemoryTokensRepository();
-      system = new RegisterUseCase(usersRepository, tokensRepository);
+      mailProvider = new InMemoryMailProvider();
+
+      system = new RegisterUseCase(
+        usersRepository,
+        tokensRepository,
+        mailProvider,
+      );
     });
 
     it("should able to register an user", async () => {
@@ -63,6 +71,24 @@ describe("User register test", (): void => {
           password: "password123",
         }),
       ).rejects.toBeInstanceOf(UserAlreadyExistsError);
+    });
+
+    it("should create a verification token and send an email", async () => {
+      await system.execute({
+        name: "User Mail Test",
+        document: "214.099.400-04",
+        email: "mailtest@email.com",
+        password: "password123",
+      });
+
+      expect(tokensRepository.tokens).toHaveLength(1);
+      expect(tokensRepository.tokens[0].type).toBe("EMAIL_VERIFICATION");
+
+      expect(mailProvider.emails).toHaveLength(1);
+      expect(mailProvider.emails[0].to).toBe("mailtest@email.com");
+      expect(mailProvider.emails[0].body).toContain(
+        "been successfully created",
+      );
     });
   });
 });

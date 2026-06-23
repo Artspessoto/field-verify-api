@@ -6,6 +6,8 @@ import { encrypt } from "~/utils/crypto";
 import { DocumentAlreadyInUseError } from "~/use-cases/errors/document-already-in-use-error";
 import { ITokensRepository } from "~/repositories/tokens-repository";
 import dayjs from "dayjs";
+import { env } from "~/env";
+import { IMailProvider } from "~/providers/mail-provider";
 
 export interface IRegisterUseCaseReq {
   name: string;
@@ -18,6 +20,7 @@ export class RegisterUseCase {
   constructor(
     private usersRepository: IUsersRepository,
     private tokensRepository: ITokensRepository,
+    private mailProvider: IMailProvider,
   ) {}
 
   async execute({
@@ -54,7 +57,21 @@ export class RegisterUseCase {
       expires_at: expiresIn,
     });
 
-    console.log(token);
+    const verifyLink = `${env.APP_WEB_URL}/verify-email?token=${token.token}`;
+
+    await this.mailProvider.sendMail({
+      to: user.email,
+      subject: "[FieldVerify] Welcome! Verify your email",
+      body: `
+       <div style="font-family: sans-serif; font-size: 16px; color: #111;">
+        <h1>Hello, ${user.name}!</h1>
+        <p>Your FieldVerify account has been successfully created.</p>
+        <p>To start performing audits, you need to confirm this email by clicking the link below:</p>
+        <p><a href="${verifyLink}">Verify my email</a></p>
+        <p>This link expires in 24 hours. If you didn't create this account, you can safely ignore this email.</p>
+      </div>
+      `,
+    });
 
     return { user };
   }

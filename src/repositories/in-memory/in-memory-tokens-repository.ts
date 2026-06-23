@@ -21,7 +21,7 @@ export class InMemoryTokensRepository implements ITokensRepository {
   }
 
   async findByToken(token: string): Promise<Token | null> {
-    const findedToken = this.tokens.find((item) => item.id == token);
+    const findedToken = this.tokens.find((item) => item.token == token);
 
     if (!findedToken) return null;
 
