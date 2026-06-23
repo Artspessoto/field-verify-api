@@ -16,10 +16,16 @@ import {
   deactivateDoc,
   profileDoc,
   registerDoc,
+  resetPasswordDoc,
   searchDoc,
+  sendPasswordResetDoc,
   updateProfileDoc,
+  verifyEmailDoc,
 } from "~/schemas/user.docs";
 import { activate } from "./activate";
+import { sendPasswordReset } from "./send-password-reset";
+import { verifyEmail } from "./verify-email";
+import { resetPassword } from "./reset-password";
 
 export async function usersRoutes(app: FastifyInstance) {
   const appWithZod = app.withTypeProvider<ZodTypeProvider>();
@@ -27,6 +33,24 @@ export async function usersRoutes(app: FastifyInstance) {
   appWithZod.post("/users", { schema: registerDoc }, register);
 
   appWithZod.post("/sessions", { schema: authenticateDoc }, authenticate);
+
+  appWithZod.post(
+    "/users/password/forgot",
+    { schema: sendPasswordResetDoc },
+    sendPasswordReset,
+  );
+
+  appWithZod.patch(
+    "/users/verify-email",
+    { schema: verifyEmailDoc },
+    verifyEmail,
+  );
+
+  appWithZod.patch(
+    "/users/password/reset",
+    { schema: resetPasswordDoc },
+    resetPassword,
+  );
 
   appWithZod.register(async (privateRoutes) => {
     const privateZodRoutes = privateRoutes.withTypeProvider<ZodTypeProvider>();

@@ -6,6 +6,9 @@ import {
   changePasswordSchema,
   userParamsSchema,
   searchSchema,
+  sendPasswordResetSchema,
+  verifyEmailSchema,
+  resetPasswordSchema,
 } from "./user.schema";
 import { authenticateSchema } from "./authenticate.schema";
 
@@ -86,6 +89,33 @@ export const activateDoc = {
   summary: "Activate a user (Admin only)",
   security,
   params: userParamsSchema,
+  response: {
+    204: z.null(),
+  },
+};
+
+export const sendPasswordResetDoc = {
+  tags: ["Users"],
+  summary: "Forgot password (send token to user email)",
+  body: sendPasswordResetSchema,
+  response: {
+    204: z.null(),
+  },
+};
+
+export const verifyEmailDoc = {
+  tags: ["Users"],
+  summary: "Verify user email via token",
+  body: verifyEmailSchema,
+  response: {
+    204: z.null(),
+  },
+};
+
+export const resetPasswordDoc = {
+  tags: ["Users"],
+  summary: "Reset user password using token",
+  body: resetPasswordSchema,
   response: {
     204: z.null(),
   },

@@ -71,9 +71,30 @@ export const searchSchema = z.object({
   }, z.boolean().optional()),
 });
 
+export const sendPasswordResetSchema = userSchema.pick({
+  email: true,
+});
+
+export const verifyEmailSchema = z.object({
+  token: z.uuid("Invalid token format."),
+});
+
+export const resetPasswordSchema = verifyEmailSchema
+  .extend({
+    password: userSchema.shape.password,
+    confirmPassword: z.string().min(6),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "The passwords don't match.",
+    path: ["confirmPassword"],
+  });
+
 export type UserBodySchema = z.infer<typeof userSchema>;
 export type UserResponse = z.infer<typeof userResponseSchema>;
 export type UpdateProfileSchema = z.infer<typeof updateProfileSchema>;
 export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;
 export type UserParamsSchema = z.infer<typeof userParamsSchema>;
 export type SearchSchema = z.infer<typeof searchSchema>;
+export type SendPasswordSchema = z.infer<typeof sendPasswordResetSchema>;
+export type VerifyEmailSchema = z.infer<typeof verifyEmailSchema>;
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
